@@ -3,19 +3,19 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.30611.23
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SWApi", "SWApi\SWApi.csproj", "{DD9BB6D1-7417-43FB-960D-C3DCB63C57D9}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SW.Api", "SW.Api\SW.Api.csproj", "{DD9BB6D1-7417-43FB-960D-C3DCB63C57D9}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SW.Model", "SW.Model\SW.Model.csproj", "{9CBAACDE-8193-4226-953E-E343BBA8BF88}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SW.Model", "SW.Model\SW.Model.csproj", "{9CBAACDE-8193-4226-953E-E343BBA8BF88}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SWApi.Handlers.Tests", "SWApi.Handlers.Tests\SWApi.Handlers.Tests.csproj", "{987D9CF6-84E8-453B-9536-F50CF990DC2C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SW.Api.Handlers.Tests", "SW.Api.Handlers.Tests\SW.Api.Handlers.Tests.csproj", "{987D9CF6-84E8-453B-9536-F50CF990DC2C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SWApi.Handlers", "SWApi.Handlers\SWApi.Handlers.csproj", "{EDDD5557-D3EA-410A-89F1-D5A670D36483}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SW.Api.Handlers", "SW.Api.Handlers\SW.Api.Handlers.csproj", "{EDDD5557-D3EA-410A-89F1-D5A670D36483}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SWApi.Requests", "SWApi.Requests\SWApi.Requests.csproj", "{00EAE532-651E-4C95-A4CE-A70FCB88B0B2}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SW.Api.Requests", "SW.Api.Requests\SW.Api.Requests.csproj", "{00EAE532-651E-4C95-A4CE-A70FCB88B0B2}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SWApi.Dao", "SWApi.Dao\SWApi.Dao.csproj", "{CF09DAC3-18AF-49DB-9592-2DB684821994}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SW.Dao", "SW.Dao\SW.Dao.csproj", "{CF09DAC3-18AF-49DB-9592-2DB684821994}"
 EndProject
-Project("{00D1A9C2-B5F0-4AF3-8072-F6C62B433612}") = "SWApi.Database", "SWApi.Database\SWApi.Database.sqlproj", "{00D8B928-A2E7-4DDB-BF2A-2E9CE029E486}"
+Project("{00D1A9C2-B5F0-4AF3-8072-F6C62B433612}") = "SW.Database", "SW.Database\SW.Database.sqlproj", "{00D8B928-A2E7-4DDB-BF2A-2E9CE029E486}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
