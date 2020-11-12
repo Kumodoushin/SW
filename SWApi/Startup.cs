@@ -1,16 +1,13 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+using System.Reflection;
+using MediatR;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
-using SWApi.Controllers;
+using SW.Model;
+using SWApi.Handlers;
+using SWApi.Requests.Base;
 
 namespace SWApi
 {
@@ -27,8 +24,10 @@ namespace SWApi
         public void ConfigureServices(IServiceCollection services)
         {
 
-            services.AddSingleton<CharactersFacade>();
             services.AddControllers();
+            services.AddSingleton<CharactersFacade>();
+            services.AddMediatR(Assembly.GetAssembly(typeof(BaseResponse)));
+            services.AddMediatR(Assembly.GetAssembly(typeof(CharacterCreationHandler)));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
