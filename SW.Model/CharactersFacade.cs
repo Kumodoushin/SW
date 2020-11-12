@@ -9,8 +9,8 @@ namespace SW.Model
     public class CharacterUpdateForm
     {
         public string Name { get; set; }
-        public List<int> Episodes { get; set; }
-        public List<Guid> Friends { get; set; }
+        public List<int> Episodes { get; set; } = new List<int>();
+        public List<Guid> Friends { get; set; } = new List<Guid>();
     }
 
     public class CharactersFacade
@@ -92,11 +92,30 @@ namespace SW.Model
 
         public Characters Query()
         {
-            return new Characters(_characters.ToArray());
+            return 
+                new Characters(
+                    _characters.Select(x=>
+                        new Character { 
+                            Id=x.Id,
+                            Name=x.Name,
+                            Episodes=new Episodes(x.Episodes.Select(y=>y).ToArray()),
+                            Friends=new Friends(x.Friends.Select(y=>new Friend() { Id=y.Id,Name=y.Name}).ToArray())
+            }).ToArray());
         }
         public Character QueryById(Guid id)
         {
-            return _characters.FirstOrDefault(x => x.Id == id);
+            var chr = _characters.FirstOrDefault(x => x.Id == id);
+            if (chr is null)
+            { 
+                return null;
+            }
+            return new Character
+            {
+                Id = chr.Id,
+                Name = chr.Name,
+                Episodes = new Episodes(chr.Episodes.Select(y => y).ToArray()),
+                Friends = new Friends(chr.Friends.Select(y => new Friend() { Id = y.Id, Name = y.Name }).ToArray())
+            };
         }
 
         public (bool success, Dictionary<string, string> facadeErrors) TryAdd(Character character)
