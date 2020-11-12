@@ -9,6 +9,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\SWApi.Dao\SWApi.Dao.csproj" />
     <ProjectReference Include="..\SWApi.Requests\SWApi.Requests.csproj" />
   </ItemGroup>
 

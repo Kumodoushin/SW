@@ -2,10 +2,12 @@ using System.Reflection;
 using MediatR;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using SW.Model;
+using SWApi.Dao;
 using SWApi.Handlers;
 using SWApi.Requests.Base;
 
@@ -23,9 +25,9 @@ namespace SWApi
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-
+            services.AddDbContext<CharactersContext>(options => options.UseSqlServer(Configuration.GetConnectionString("characterConnection")));
             services.AddControllers();
-            services.AddSingleton<CharactersFacade>();
+            services.AddScoped<ICharacterFacade, CharactersContext>();
             services.AddMediatR(Assembly.GetAssembly(typeof(BaseResponse)));
             services.AddMediatR(Assembly.GetAssembly(typeof(CharacterCreationHandler)));
         }

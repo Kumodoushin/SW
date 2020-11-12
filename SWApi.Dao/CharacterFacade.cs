@@ -3,8 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using SW.Model;
 
-namespace SW.Model
+namespace SWApi.Dao
 {
     public class CharacterUpdateForm
     {
@@ -13,7 +14,7 @@ namespace SW.Model
         public List<Guid> Friends { get; set; } = new List<Guid>();
     }
 
-    public class CharactersFacade
+    public class CharactersFacade: ICharacterFacade
     {
         private List<Character> _characters;
 
@@ -92,21 +93,22 @@ namespace SW.Model
 
         public Characters Query()
         {
-            return 
+            return
                 new Characters(
-                    _characters.Select(x=>
-                        new Character { 
-                            Id=x.Id,
-                            Name=x.Name,
-                            Episodes=new Episodes(x.Episodes.Select(y=>y).ToArray()),
-                            Friends=new Friends(x.Friends.Select(y=>new Friend() { Id=y.Id,Name=y.Name}).ToArray())
-            }).ToArray());
+                    _characters.Select(x =>
+                        new Character
+                        {
+                            Id = x.Id,
+                            Name = x.Name,
+                            Episodes = new Episodes(x.Episodes.Select(y => y).ToArray()),
+                            Friends = new Friends(x.Friends.Select(y => new Friend() { Id = y.Id, Name = y.Name }).ToArray())
+                        }).ToArray());
         }
         public Character QueryById(Guid id)
         {
             var chr = _characters.FirstOrDefault(x => x.Id == id);
             if (chr is null)
-            { 
+            {
                 return null;
             }
             return new Character
@@ -120,6 +122,7 @@ namespace SW.Model
 
         public (bool success, Dictionary<string, string> facadeErrors) TryAdd(Character character)
         {
+            character.Id = Guid.NewGuid();
             var facadeErrors = new Dictionary<string, string>();
             bool result = false;
             if (_characters.Any(x => x.Id == character.Id))
@@ -175,5 +178,4 @@ namespace SW.Model
             return new Dictionary<string, string> { { nameof(Character), "Character does not exist" } };
         }
     }
-
 }

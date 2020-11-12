@@ -1,5 +1,6 @@
 ﻿using MediatR;
 using SW.Model;
+using SWApi.Dao;
 using SWApi.Requests;
 using System;
 using System.Collections.Generic;
@@ -11,9 +12,9 @@ namespace SWApi.Handlers
 {
     public class CharacterCreationHandler : IRequestHandler<CharacterCreationCommand, CharacterCreationResponse>
     {
-        private readonly CharactersFacade _facade;
+        private readonly ICharacterFacade _facade;
 
-        public CharacterCreationHandler(CharactersFacade facade)
+        public CharacterCreationHandler(ICharacterFacade facade)
         {
             _facade = facade;
         }
@@ -23,7 +24,6 @@ namespace SWApi.Handlers
             var existingOnes = _facade.Query();
 
             var errors = new Dictionary<string, string>();
-            var newId = Guid.NewGuid();
 
             if (existingOnes.Count(x => x.Name == request.Name) > 0)
             {
@@ -43,29 +43,29 @@ namespace SWApi.Handlers
 
             if (errors.Count == 0)
             {
-                var (success, facadeErrors) =
-                  _facade.TryAdd(
-                      new Character
-                      {
-                          Id = newId,
-                          Name = request.Name,
-                          Episodes =
+                var chr =
+                    new Character
+                    {
+                        Name = request.Name,
+                        Episodes =
                             new Episodes(
                                 Episode.List
                                        .Where(x => request
                                                         .Episodes
                                                         .Contains(x.Value))
                                        .ToArray()),
-                          Friends =
+                        Friends =
                             new Friends(
                                 existingOnes.Where(x => request
                                                             .Friends
                                                             .Contains(x.Id))
                                             .ToArray())
-                      });
+                    };
+                var (success, facadeErrors) =
+                  _facade.TryAdd(chr);
                 if (success)
                 {
-                    return Task.FromResult(new CharacterCreationResponse{ Id = newId });
+                    return Task.FromResult(new CharacterCreationResponse{ Id = chr.Id });
                 }
                 foreach (var error in facadeErrors)
                 {

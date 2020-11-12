@@ -1,19 +1,22 @@
 using System.Threading;
 using Xunit;
-using SW.Model;
 using SWApi.Requests;
 using System.Linq;
 using System.Collections.Generic;
 using System;
+using SWApi.Dao;
+using Microsoft.EntityFrameworkCore;
 
 namespace SWApi.Handlers.Tests
 {
-    public class Character
+    public class CharacterDbContextTests
     {
+        private readonly string _connectionString="Data Source=(LocalDb)\\.;Initial Catalog=StarWars;Integrated Security=True;Connect Timeout=60";
         [Fact]
         public void QueryingCollectionHandler_ReturnsAllCharactersFromFacade()
         {
-            var facade = new CharactersFacade();
+            var facade = 
+                new CharactersContext(new DbContextOptionsBuilder().UseSqlServer(_connectionString).Options);
             var characters = facade.Query();
             Assert.NotNull(characters);
             Assert.NotEmpty(characters);
@@ -28,7 +31,8 @@ namespace SWApi.Handlers.Tests
         [Fact]
         public void QueryingSingleHandler_ReturnsSpecificCharacterFromFacade()
         {
-            var facade = new CharactersFacade();
+            var facade =
+                new CharactersContext(new DbContextOptionsBuilder().UseSqlServer(_connectionString).Options);
             var characterIds = facade.Query().Select(x=>x.Id).ToList();
             Assert.NotNull(characterIds);
             Assert.NotEmpty(characterIds);
@@ -51,7 +55,8 @@ namespace SWApi.Handlers.Tests
         [Fact]
         public void SubsequentQueryReturnsTheSameValues()
         {
-            var facade = new CharactersFacade();
+            var facade =
+                new CharactersContext(new DbContextOptionsBuilder().UseSqlServer(_connectionString).Options);
             var characterIds = facade.Query().Select(x => x.Id).ToList();
             Assert.NotNull(characterIds);
             Assert.NotEmpty(characterIds);
@@ -91,9 +96,9 @@ namespace SWApi.Handlers.Tests
     
         [Fact]
         public void FullLifecycle()
-        {
-            var facade = new CharactersFacade();
-            var creationHandler = new CharacterCreationHandler(facade);
+        {           
+            var creationHandler = 
+                new CharacterCreationHandler(new CharactersContext(new DbContextOptionsBuilder().UseSqlServer(_connectionString).Options));
             string oldName = $"Random character with guid name {Guid.NewGuid()}";
             var creationResult =
                 creationHandler.Handle(new CharacterCreationCommand() { Name = oldName, }, new CancellationToken())
@@ -101,7 +106,8 @@ namespace SWApi.Handlers.Tests
                                .GetResult();
             Assert.True(creationResult.IsSuccessful);
 
-            var queryHandler = new CharacterQueryHandler(facade);
+            var queryHandler = 
+                new CharacterQueryHandler(new CharactersContext(new DbContextOptionsBuilder().UseSqlServer(_connectionString).Options));
             var queryResult = 
                 queryHandler.Handle(new CharacterQuery(creationResult.Id), new CancellationToken())
                             .GetAwaiter()
@@ -109,7 +115,8 @@ namespace SWApi.Handlers.Tests
             Assert.True(queryResult.IsSuccessful);
 
             string newName = $"New name with guid {Guid.NewGuid()}";
-            var updateHandler = new CharacterUpdateHandler(facade);
+            var updateHandler = 
+                new CharacterUpdateHandler(new CharactersContext(new DbContextOptionsBuilder().UseSqlServer(_connectionString).Options));
             var updateResult =
                 updateHandler.Handle(new CharacterUpdateCommand(creationResult.Id, new CharacterUpdateForm() { Name = newName }), new CancellationToken())
                              .GetAwaiter()
@@ -126,7 +133,8 @@ namespace SWApi.Handlers.Tests
             Assert.Equal(newName, updatedQueryResult.Data.Name);
             Assert.NotEqual(queryResult.Data.Name, updatedQueryResult.Data.Name);
 
-            var deleteHandler = new CharacterDeletionHandler(facade);
+            var deleteHandler = 
+                new CharacterDeletionHandler(new CharactersContext(new DbContextOptionsBuilder().UseSqlServer(_connectionString).Options));
             var deletionResult =
                 deleteHandler.Handle(new CharacterDeletionCommand(creationResult.Id), new CancellationToken())
                              .GetAwaiter()

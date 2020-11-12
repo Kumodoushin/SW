@@ -13,6 +13,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SWApi.Handlers", "SWApi.Han
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SWApi.Requests", "SWApi.Requests\SWApi.Requests.csproj", "{00EAE532-651E-4C95-A4CE-A70FCB88B0B2}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SWApi.Dao", "SWApi.Dao\SWApi.Dao.csproj", "{CF09DAC3-18AF-49DB-9592-2DB684821994}"
+EndProject
+Project("{00D1A9C2-B5F0-4AF3-8072-F6C62B433612}") = "SWApi.Database", "SWApi.Database\SWApi.Database.sqlproj", "{00D8B928-A2E7-4DDB-BF2A-2E9CE029E486}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -39,6 +43,16 @@ Global
 		{00EAE532-651E-4C95-A4CE-A70FCB88B0B2}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{00EAE532-651E-4C95-A4CE-A70FCB88B0B2}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{00EAE532-651E-4C95-A4CE-A70FCB88B0B2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CF09DAC3-18AF-49DB-9592-2DB684821994}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CF09DAC3-18AF-49DB-9592-2DB684821994}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CF09DAC3-18AF-49DB-9592-2DB684821994}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CF09DAC3-18AF-49DB-9592-2DB684821994}.Release|Any CPU.Build.0 = Release|Any CPU
+		{00D8B928-A2E7-4DDB-BF2A-2E9CE029E486}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{00D8B928-A2E7-4DDB-BF2A-2E9CE029E486}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{00D8B928-A2E7-4DDB-BF2A-2E9CE029E486}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
+		{00D8B928-A2E7-4DDB-BF2A-2E9CE029E486}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{00D8B928-A2E7-4DDB-BF2A-2E9CE029E486}.Release|Any CPU.Build.0 = Release|Any CPU
+		{00D8B928-A2E7-4DDB-BF2A-2E9CE029E486}.Release|Any CPU.Deploy.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

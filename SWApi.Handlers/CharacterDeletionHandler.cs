@@ -1,5 +1,5 @@
 ﻿using MediatR;
-using SW.Model;
+using SWApi.Dao;
 using SWApi.Requests;
 using System.Linq;
 using System.Threading;
@@ -9,9 +9,9 @@ namespace SWApi.Handlers
 {
     public class CharacterDeletionHandler : IRequestHandler<CharacterDeletionCommand, CharacterDeletionResponse>
     {
-        private readonly CharactersFacade _facade;
+        private readonly ICharacterFacade _facade;
 
-        public CharacterDeletionHandler(CharactersFacade characterFacade)
+        public CharacterDeletionHandler(ICharacterFacade characterFacade)
         {
             _facade = characterFacade;
         }

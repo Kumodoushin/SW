@@ -1,5 +1,6 @@
 ﻿using MediatR;
 using SW.Model;
+using SWApi.Dao;
 using SWApi.Requests;
 using System.Collections.Generic;
 using System.Threading;
@@ -10,9 +11,9 @@ namespace SWApi.Handlers
 
     public class CharacterQueryHandler : IRequestHandler<CharacterQuery, CharacterQueryResponse>
     {
-        private readonly CharactersFacade _facade;
+        private readonly ICharacterFacade _facade;
 
-        public CharacterQueryHandler(CharactersFacade facade)
+        public CharacterQueryHandler(ICharacterFacade facade)
         {
             _facade = facade;
         }
