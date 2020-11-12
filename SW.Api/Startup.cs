@@ -9,6 +9,8 @@ using Microsoft.Extensions.Hosting;
 using SW.Dao;
 using SW.Api.Handlers;
 using SW.Api.Requests.Base;
+using System.IO;
+using System;
 
 namespace SW.Api
 {
@@ -26,6 +28,12 @@ namespace SW.Api
         {
             services.AddDbContext<CharactersContext>(options => options.UseSqlServer(Configuration.GetConnectionString("characterConnection")));
             services.AddControllers();
+            services.AddSwaggerGen(c =>
+            {
+                var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
+                var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
+                c.IncludeXmlComments(xmlPath);
+            });
             services.AddScoped<ICharacterFacade, CharactersContext>();
             services.AddMediatR(Assembly.GetAssembly(typeof(BaseResponse)));
             services.AddMediatR(Assembly.GetAssembly(typeof(CharacterCreationHandler)));
@@ -38,6 +46,12 @@ namespace SW.Api
             {
                 app.UseDeveloperExceptionPage();
             }
+            app.UseSwagger();
+            app.UseSwaggerUI(c =>
+            {
+                c.SwaggerEndpoint("swagger/v1/swagger.json", "Sad Star Wars API v1");
+                c.RoutePrefix = string.Empty;
+            });
 
             app.UseHttpsRedirection();
 
