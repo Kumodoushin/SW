@@ -3,6 +3,7 @@ using SW.Dao;
 using SW.Api.Requests;
 using System.Threading;
 using System.Threading.Tasks;
+using SW.Model;
 
 namespace SW.Api.Handlers
 {
@@ -15,10 +16,25 @@ namespace SW.Api.Handlers
             _facade = facade;
         }
 
+
         public Task<CharactersQueryResponse> Handle(CharactersQuery request, CancellationToken cancellationToken)
         {
-            var result = _facade.Query();
-            return Task.FromResult(new CharactersQueryResponse { Data=result});
+            Characters result;
+            if (request?.PaginationOptions != null)
+            {
+                int pageNr;
+                int charactersCount;
+                (result, pageNr, charactersCount) = _facade.QueryPaginated(request.PaginationOptions);
+                return Task.FromResult(new CharactersQueryResponse { Data = result,Total=charactersCount,CurrentPage=pageNr });
+            }
+            else
+            {
+                result = _facade.Query();
+                return Task.FromResult(new CharactersQueryResponse { Data = result });
+            }
+            
+
+            
         }
     }
 

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using SW.Model;
+using SW.Model.Helpers;
 
 namespace SW.Dao
 {  
@@ -96,6 +97,41 @@ namespace SW.Dao
                             Friends = new Friends(x.Friends.Select(y => new Friend() { Id = y.Id, Name = y.Name }).ToArray())
                         }).ToArray());
         }
+
+
+        public (Characters data, int pageNr, int charactersCount) QueryPaginated(PaginationOptions paginationOptions)
+        {
+            int count = _characters.Count();
+            int lastPage = 0;
+            if (count % paginationOptions.PageSize != 0)
+            {
+                lastPage = count / paginationOptions.PageSize + 1;
+            }
+            else
+            {
+                lastPage = count / paginationOptions.PageSize;
+            }
+
+            int pageNr = lastPage < paginationOptions.PageNumber ? lastPage : paginationOptions.PageNumber;
+
+            return
+                (
+                    new Characters(
+                        _characters
+                            .Skip(paginationOptions.PageSize * (pageNr - 1))
+                            .Take(paginationOptions.PageSize)
+                            .Select(x =>
+                            new Character
+                            {
+                                Id = x.Id,
+                                Name = x.Name,
+                                Episodes = new Episodes(x.Episodes.Select(y => y).ToArray()),
+                                Friends = new Friends(x.Friends.Select(y => new Friend() { Id = y.Id, Name = y.Name }).ToArray())
+                            }).ToArray())
+                    , pageNr, count
+                );
+        }
+
         public Character QueryById(Guid id)
         {
             var chr = _characters.FirstOrDefault(x => x.Id == id);
@@ -169,5 +205,6 @@ namespace SW.Dao
             }
             return new Dictionary<string, string> { { nameof(Character), "Character does not exist" } };
         }
+
     }
 }

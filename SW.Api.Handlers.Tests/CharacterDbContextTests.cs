@@ -7,6 +7,7 @@ using System;
 using SW.Dao;
 using Microsoft.EntityFrameworkCore;
 using SW.Model;
+using SW.Model.Helpers;
 
 namespace SW.Api.Handlers.Tests
 {
@@ -152,6 +153,58 @@ namespace SW.Api.Handlers.Tests
                              .GetAwaiter()
                              .GetResult();
             Assert.False(deletionRetryResult.IsSuccessful);
+        }
+
+        [Fact]
+        public void pagination()
+        {
+
+
+            var queryHandler =
+                new CharactersQueryHandler(new CharactersContext(new DbContextOptionsBuilder().UseSqlServer(_connectionString).Options));
+
+            var nonpaginatedResult =
+                queryHandler.Handle(new CharactersQuery(), new CancellationToken())
+                            .GetAwaiter()
+                            .GetResult();
+            Assert.True(nonpaginatedResult.IsSuccessful);
+            int count = nonpaginatedResult.Data.Count;
+
+            for (int pageSize = 1; pageSize < count + 2; pageSize++)
+            {
+                int requestedPage = 1;
+                do
+                {                    
+                    var paginatedResult =
+                    queryHandler
+                        .Handle(
+                            new CharactersQuery
+                            {
+                                PaginationOptions =
+                                    new PaginationOptions
+                                    {
+                                        PageNumber = requestedPage,
+                                        PageSize = pageSize
+                                    }
+                            },
+                            new CancellationToken())
+                        .GetAwaiter()
+                        .GetResult();
+                    Assert.True(paginatedResult.IsSuccessful);
+                    Assert.Equal(count, paginatedResult.Total);
+                    if (paginatedResult.Data.Count < pageSize)
+                    {
+                        Assert.True(requestedPage == paginatedResult.CurrentPage);
+                    }
+                    else
+                    {
+                        Assert.True(requestedPage >= paginatedResult.CurrentPage);
+                    }
+                    
+                } while (count > requestedPage++ * pageSize);
+                
+            }
+
         }
     }
 }

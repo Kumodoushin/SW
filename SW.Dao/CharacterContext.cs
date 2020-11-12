@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using SW.Model;
+using SW.Model.Helpers;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,16 +14,12 @@ namespace SW.Dao
         internal DbSet<CharacterFriend> CharacterFriends { get; set; }
         internal DbSet<CharacterEpisode> CharacterEpisodes { get; set; }
         public CharactersContext(DbContextOptions options) : base(options){ }
-       
 
         public Characters Query()
         {
             return
                 new Characters(
-                Characters
-                    .AsNoTracking()
-                    .Include(x => x.Friends)
-                    .Include(x => x.Episodes)
+                    Characters.AsNoTracking().Include(x => x.Friends).Include(x => x.Episodes)
                     .Select(x => new Character
                     {
                         Id = x.Id,
@@ -41,6 +38,47 @@ namespace SW.Dao
                                          .ToArray())
                     })
                     .ToArray());
+        }
+        public (Characters data, int pageNr, int charactersCount) QueryPaginated(PaginationOptions paginationOptions)
+        {
+            int count = Characters.Count();
+            int lastPage = 0;
+            int pageSize = paginationOptions.PageSize < 1 ? 1 : paginationOptions.PageSize;
+            if (count% pageSize != 0)
+            {
+                lastPage = count / pageSize + 1;
+            }
+            else
+            {
+                lastPage = count / pageSize;
+            }
+
+            int pageNr = lastPage < paginationOptions.PageNumber?lastPage:paginationOptions.PageNumber;
+            
+            return (                
+                new Characters(
+                    Characters.AsNoTracking().Include(x => x.Friends).Include(x => x.Episodes)
+                    .Skip(pageSize * (pageNr-1))
+                    .Take(pageSize)
+                    .Select(x => new Character
+                    {
+                        Id = x.Id,
+                        Name = x.Name,
+                        Episodes =
+                            new Episodes(x.Episodes
+                                          .Select(y => y.Episode)
+                                          .ToArray()),
+                        Friends =
+                            new Friends(x.Friends
+                                         .Select(y => new Friend
+                                         {
+                                             Id = y.FriendId,
+                                             Name = y.FriendName
+                                         })
+                                         .ToArray())
+                    })
+                    .ToArray())
+                , pageNr, count);
         }
 
         public Character QueryById(Guid id)
@@ -207,17 +245,6 @@ namespace SW.Dao
                 this.CharacterEpisodes.RemoveRange(episodesToDelete);
                 this.CharacterEpisodes.AddRange(episodesToAdd);
 
-                //chr.Episodes.RemoveAll(x => !characterForm.Episodes.Contains(x.Episode.Value));
-                //chr.Episodes
-                //    .AddRange(
-                //        characterForm
-                //            .Episodes
-                //            .Where(x => !chr.Episodes.Select(y => y.Episode.Value).Contains(x))
-                //            .Select(x => new CharacterEpisode
-                //            {
-                //                CharacterId = characterId,
-                //                Episode = Episode.FromValue(x)
-                //            }));
                 SaveChanges();
                 return new Dictionary<string, string>();
             }
@@ -262,7 +289,7 @@ namespace SW.Dao
                 .HasConversion(p => p.Value, v => Episode.FromValue(v));
         }
 
-        
+       
     }
 
     internal class CharacterDao

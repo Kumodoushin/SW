@@ -4,11 +4,11 @@ using SW.Api.Requests.Base;
 
 namespace SW.Api.Requests
 {
-    public class CharactersQuery : IRequest<CharactersQueryResponse>
+    public class CharactersQuery : PaginatedRequest<CharactersQueryResponse>
     {
     }
 
-    public class CharactersQueryResponse:BaseResponse<Characters>
+    public class CharactersQueryResponse: PaginatedResponse<Characters>
     {
     }
 }
