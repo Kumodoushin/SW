@@ -20,6 +20,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\SW.Api.Handlers\SW.Api.Handlers.csproj" />
+    <ProjectReference Include="..\SW.Dao\SW.Dao.csproj" />
   </ItemGroup>
 
 

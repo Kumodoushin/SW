@@ -10,7 +10,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\SW.Api.Requests\SW.Api.Requests.csproj" />
-    <ProjectReference Include="..\SW.Dao\SW.Dao.csproj" />
+    <ProjectReference Include="..\SW.Commons\SW.Commons.csproj" />
   </ItemGroup>
 
 </Project>

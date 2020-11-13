@@ -156,7 +156,7 @@ namespace SW.Api.Handlers.Tests
         }
 
         [Fact]
-        public void pagination()
+        public void QueryingWithPagination()
         {
 
 

@@ -12,6 +12,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\SW.Commons\SW.Commons.csproj" />
     <ProjectReference Include="..\SW.Model\SW.Model.csproj" />
   </ItemGroup>
 

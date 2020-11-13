@@ -1,5 +1,4 @@
-﻿using MediatR;
-using SW.Model;
+﻿using SW.Model;
 using SW.Api.Requests.Base;
 
 namespace SW.Api.Requests
