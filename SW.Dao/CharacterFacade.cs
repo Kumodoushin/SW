@@ -148,11 +148,10 @@ namespace SW.Dao
             };
         }
 
-        public (bool success, Dictionary<string, string> facadeErrors) TryAdd(Character character)
+        public (Guid newCharacterId, Dictionary<string, string> facadeErrors) TryAdd(Character character)
         {
             character.Id = Guid.NewGuid();
             var facadeErrors = new Dictionary<string, string>();
-            bool result = false;
             if (_characters.Any(x => x.Id == character.Id))
             {
                 facadeErrors.Add(nameof(Character.Id), "Character with Id exists.");
@@ -161,9 +160,9 @@ namespace SW.Dao
             if (!facadeErrors.Any())
             {
                 _characters.Add(character);
-                result = true;
+                return (character.Id,new Dictionary<string,string>());
             }
-            return (result, facadeErrors);
+            return (Guid.Empty, facadeErrors);
         }
 
         public Dictionary<string, string> TryUpdate(Guid characterId, CharacterUpdateForm characterForm)

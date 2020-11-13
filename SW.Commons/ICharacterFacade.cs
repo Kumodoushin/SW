@@ -11,7 +11,7 @@ namespace SW.Dao
         (Characters data,int pageNr,int charactersCount) QueryPaginated(PaginationOptions paginationOptions);
         Character QueryById(Guid id);
 
-        (bool success, Dictionary<string, string> facadeErrors) TryAdd(Character character);
+        (Guid newCharacterId, Dictionary<string, string> facadeErrors) TryAdd(Character character);
 
         Dictionary<string, string> TryUpdate(Guid characterId, CharacterUpdateForm characterForm);
 

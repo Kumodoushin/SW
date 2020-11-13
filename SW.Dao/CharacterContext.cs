@@ -113,8 +113,9 @@ namespace SW.Dao
                     };
         }
 
-        public (bool success, Dictionary<string, string> facadeErrors) TryAdd(Character character)
+        public (Guid newCharacterId, Dictionary<string, string> facadeErrors) TryAdd(Character character)
         {
+
             try
             {
                 var friends = 
@@ -123,7 +124,7 @@ namespace SW.Dao
                         .ToList();
                 if (character.Friends.Any(x => !friends.Select(y => y.Id).Contains(x.Id)))
                 {
-                    return (false, new Dictionary<string, string> { { nameof(Friends), "Some friends do not exist!" } });
+                    return (Guid.Empty, new Dictionary<string, string> { { nameof(Friends), "Some friends do not exist!" } });
                 }
                 
                 var chr = new CharacterDao()
@@ -143,14 +144,13 @@ namespace SW.Dao
                             .Select(x => new CharacterEpisode { CharacterId = chr.Id, Episode = x })
                             .ToList();
                     SaveChanges();
-                    character.Id = chr.Id;
-                    return (true, new Dictionary<string, string>());
+                    return (chr.Id, new Dictionary<string, string>());
                 }
-                return (false, new Dictionary<string, string> { { "database error", "Error when saving." } });
+                return (Guid.Empty, new Dictionary<string, string> { { "database error", "Error when saving." } });
             }
             catch (Exception ex)
             {
-                return (false, new Dictionary<string, string>{ { "database error", ex.Message } });
+                return (Guid.Empty, new Dictionary<string, string>{ { "database error", ex.Message } });
             }
         }
 

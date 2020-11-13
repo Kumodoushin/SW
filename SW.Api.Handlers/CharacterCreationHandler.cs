@@ -61,11 +61,11 @@ namespace SW.Api.Handlers
                                                             .Contains(x.Id))
                                             .ToArray())
                     };
-                var (success, facadeErrors) =
+                var (newCharactersId, facadeErrors) =
                   _facade.TryAdd(chr);
-                if (success)
+                if (newCharactersId!=Guid.Empty)
                 {
-                    return Task.FromResult(new CharacterCreationResponse{ Id = chr.Id });
+                    return Task.FromResult(new CharacterCreationResponse{ Id = newCharactersId });
                 }
                 foreach (var error in facadeErrors)
                 {
